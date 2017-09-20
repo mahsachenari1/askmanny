@@ -77,7 +77,7 @@ describe("Testing a session with the SetName Intent", function () {
 
         it("should end the alexa session", function () {
             expect(speechResponse.response.shouldEndSession).not.to.be.null
-            expect(speechResponse.response.shouldEndSession).to.be.true
+            expect(speechResponse.response.shouldEndSession).to.be.false
         })
     })
 })
