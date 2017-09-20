@@ -15,6 +15,7 @@
     "mocha": "^3.3.0"
   },
   "scripts": {
+    "build": "./deploy.sh",
     "test": "mocha"
   }
 }
