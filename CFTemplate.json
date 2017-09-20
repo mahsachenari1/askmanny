@@ -4,7 +4,7 @@
         "FunctionName": {
             "Description": "Give your Skill Function a Friendly Name",
             "Type": "String",
-            "Default": "my-alexa-skill"
+            "Default": "my-awesome-alexa-skill"
         },
         "BucketName": {
             "Description": "The S3 bucket where the skill code is stored",
@@ -36,7 +36,7 @@
                 "Path": "/",
                 "Policies": [
                     {
-                        "PolicyName": "DynamoAccess",
+                        "PolicyName": "LambdaDynamoSnsFullAccess",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
                             "Statement": [
@@ -97,6 +97,21 @@
                                         "sns:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "s3:getObject",
+                                    "Resource": {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "arn:aws:s3:::",
+                                                {"Ref":"BucketName"},
+                                                "/",
+                                                {"Ref":"PackagePath"}
+                                            ]
+                                        ]
+                                    }   
                                 }
                             ]
                         }
@@ -168,7 +183,7 @@
                 }
             }
         },
-        "AlexaSkillDynamoDB": {
+        "AlexaSkillDynamoDb": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
                 "AttributeDefinitions": [
@@ -211,6 +226,24 @@
         }
     },
     "Outputs": {
+        "SnsTopicName": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "AlexaSkillSNS",
+                    "TopicName"
+                ]
+            },
+            "Description": "SNS Topic Name"
+        },
+        "DynamoDbTable": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "AlexaSkillDynamoDb",
+                    "Arn"
+                ]
+            },
+            "Description": "DynamoDb Table ARN"
+        },
         "FunctionARN": {
             "Value": {
                 "Fn::GetAtt": [
