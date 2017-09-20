@@ -7,6 +7,7 @@ phases:
       - yarn install
   pre_build:
     commands:
+      - export message_value="$CODEBUILD_RESOLVED_SOURCE_VERSION succeeded"
       - yarn mocha
   build:
     commands:

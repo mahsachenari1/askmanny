@@ -85,7 +85,8 @@ describe("Testing a session with the SetName Intent", function () {
 describe("Testing a session with the AskQuestion Intent", function () {
 
     const ctx = context({ timeout: 10 });
-    const mock_event = require('../__mockData__/askQuestion.json');
+    var mock_event = require('../__mockData__/askQuestion.json');
+    mock_event.request.intent.slots.Question.value = process.env.message_value;
     var speechResponse = null
     var speechError = null
 
