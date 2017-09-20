@@ -1,0 +1,28 @@
+{
+    "intents": [
+        {
+            "slots": [
+                {
+                    "name": "Question",
+                    "type": "AMAZON.LITERAL"
+                }
+            ],
+            "intent": "AskQuestion"
+        },
+        {
+            "intent": "SetName",
+            "slots": [
+                {
+                    "name": "UserName",
+                    "type": "AMAZON.LITERAL"
+                }
+            ]
+        },
+        {
+            "intent": "AMAZON.HelpIntent"
+        },
+        {
+            "intent": "AMAZON.StopIntent"
+        }
+    ]
+}

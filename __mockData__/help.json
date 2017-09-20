@@ -1,0 +1,40 @@
+{
+    "session": {
+      "new": false,
+      "sessionId": "SessionId.103ec62e-fc2a-4d74-8116-9adf0b02c87f",
+      "application": {
+        "applicationId": "amzn1.ask.skill.5ad7066e-8d41-4a4c-bbc5-4a096abec00c"
+      },
+      "attributes": {},
+      "user": {
+        "userId": "amzn1.ask.account.AGZIXVXGAFN6EO3WUTGIW2IU7M22HTGWD7NU3TGJENPW3TMVOEV34ECX6JCTXFI44W5GW5HYZJCBAM6T2NUJZML4HE7TZWYCRRNPNCE6D32M3ONVY4AFRRS3FR43W2OSEZO6LFB42B2UGN46OB4AEP3XL2T5OURW5JRLS6Y7LWY5LH34HACRRJTTREK7XH4FO4QCBEASBAWKT5Q"
+      }
+    },
+    "request": {
+      "type": "IntentRequest",
+      "requestId": "EdwRequestId.8a121375-73cc-4219-b2ea-319d69bfab4a",
+      "intent": {
+        "name": "AMAZON.HelpIntent",
+        "slots": {}
+      },
+      "locale": "en-US",
+      "timestamp": "2017-09-19T01:50:59Z"
+    },
+    "context": {
+      "AudioPlayer": {
+        "playerActivity": "IDLE"
+      },
+      "System": {
+        "application": {
+          "applicationId": "amzn1.ask.skill.5ad7066e-8d41-4a4c-bbc5-4a096abec00c"
+        },
+        "user": {
+          "userId": "amzn1.ask.account.AGZIXVXGAFN6EO3WUTGIW2IU7M22HTGWD7NU3TGJENPW3TMVOEV34ECX6JCTXFI44W5GW5HYZJCBAM6T2NUJZML4HE7TZWYCRRNPNCE6D32M3ONVY4AFRRS3FR43W2OSEZO6LFB42B2UGN46OB4AEP3XL2T5OURW5JRLS6Y7LWY5LH34HACRRJTTREK7XH4FO4QCBEASBAWKT5Q"
+        },
+        "device": {
+          "supportedInterfaces": {}
+        }
+      }
+    },
+    "version": "1.0"
+  }
