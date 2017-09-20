@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "./deploy.sh",
+    "prebuild": "yarn test",
     "test": "mocha"
   }
 }
