@@ -1,17 +1,8 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
-        "FunctionName": {
-            "Description": "Give your Skill Function a Friendly Name",
-            "Type": "String",
-            "Default": "my-awesome-alexa-skill"
-        },
-        "BucketName": {
-            "Description": "The S3 bucket where the skill code is stored",
-            "Type": "String"
-        },
-        "PackagePath": {
-            "Description": "The Path within the S3 bucket to the zipped node.js package",
+        "Name": {
+            "Description": "Enter your name!",
             "Type": "String"
         }
     },
@@ -97,25 +88,6 @@
                                         "sns:*"
                                     ],
                                     "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": "s3:getObject",
-                                    "Resource": {
-                                        "Fn::Join": [
-                                            "",
-                                            [
-                                                "arn:aws:s3:::",
-                                                {
-                                                    "Ref": "BucketName"
-                                                },
-                                                "/",
-                                                {
-                                                    "Ref": "PackagePath"
-                                                }
-                                            ]
-                                        ]
-                                    }
                                 }
                             ]
                         }
@@ -128,65 +100,6 @@
                 }
             }
         },
-        "AlexaSkillFunction": {
-            "Type": "AWS::Lambda::Function",
-            "DependsOn": "LambdaDynamoSNSFullAccess",
-            "Properties": {
-                "FunctionName": {
-                    "Ref": "FunctionName"
-                },
-                "Handler": "index.handler",
-                "Role": {
-                    "Fn::GetAtt": [
-                        "LambdaDynamoSNSFullAccess",
-                        "Arn"
-                    ]
-                },
-                "Description": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            "Alexa Skill code for the ",
-                            {
-                                "Ref": "FunctionName"
-                            },
-                            " skill."
-                        ]
-                    ]
-                },
-                "Code": {
-                    "S3Bucket": {
-                        "Ref": "BucketName"
-                    },
-                    "S3Key": {
-                        "Ref": "PackagePath"
-                    }
-                },
-                "Runtime": "nodejs6.10",
-                "Timeout": "10"
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "f83b0923-6d30-4aef-b62f-984aaa6ef15f"
-                }
-            }
-        },
-        "AlexaSkillFunctionPermissions": {
-            "Type": "AWS::Lambda::Permission",
-            "DependsOn": "AlexaSkillFunction",
-            "Properties": {
-                "FunctionName": {
-                    "Ref": "AlexaSkillFunction"
-                },
-                "Action": "lambda:InvokeFunction",
-                "Principal": "alexa-appkit.amazon.com"
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "b265f951-0794-4d2a-8ac3-fd2a910ff5bb"
-                }
-            }
-        },
         "AlexaSkillDynamoDb": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
@@ -196,6 +109,17 @@
                         "AttributeType": "S"
                     }
                 ],
+                "TableName": {
+                    "Fn::Join": [
+                        "",
+                        [   
+                            "Ask",
+                            {
+                                "Ref": "Name"
+                            }
+                        ]
+                    ]
+                },
                 "KeySchema": [
                     {
                         "AttributeName": "UserId",
@@ -211,34 +135,10 @@
                 "AWS::CloudFormation::Designer": {
                     "id": "c033dec6-4f1a-4c54-b4b0-475db48e8a4a"
                 }
-            },
-            "DependsOn": [
-                "AlexaSkillFunction"
-            ]
-        },
-        "AlexaSkillSNS": {
-            "Type": "AWS::SNS::Topic",
-            "Properties": {},
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "e8684a9b-33b4-42b5-a367-3d87c5f1045a"
-                }
-            },
-            "DependsOn": [
-                "AlexaSkillFunction"
-            ]
+            }
         }
     },
     "Outputs": {
-        "SnsTopicName": {
-            "Value": {
-                "Fn::GetAtt": [
-                    "AlexaSkillSNS",
-                    "TopicName"
-                ]
-            },
-            "Description": "SNS Topic Name"
-        },
         "DynamoDbTable": {
             "Value": {
                 "Fn::GetAtt": [
@@ -247,15 +147,6 @@
                 ]
             },
             "Description": "DynamoDb Table ARN"
-        },
-        "FunctionARN": {
-            "Value": {
-                "Fn::GetAtt": [
-                    "AlexaSkillFunction",
-                    "Arn"
-                ]
-            },
-            "Description": "Lambda function ARN to be placed in the Amazon Developer Portal"
         }
     },
     "Metadata": {
