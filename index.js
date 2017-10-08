@@ -23,6 +23,15 @@ const tableName = `Ask${YOUR_NAME}`;
 //create SNS client
 const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 
+// IoT Service
+
+var config = {};
+config.IOT_BROKER_ENDPOINT      = "a34hla6atspgwh.iot.us-east-1.amazonaws.com".toLowerCase();
+config.IOT_BROKER_REGION        = "us-east-1";
+config.IOT_THING_NAME           = "onscreen";
+
+var iotData = new AWS.IotData({endpoint: config.IOT_BROKER_ENDPOINT});
+
 // functions to handle userId to name mapping
 const getName = (UserId, message, self, cb) => {
     var params = {
@@ -74,6 +83,27 @@ const putName = (UserId, name, self, callback) => {
     });
 }
 
+const updateIoT = (text) => {
+    var payloadObj={ "state":{ "desired": {"speak":text} } };
+    //Prepare the parameters of the update call
+
+    var paramsUpdate = {
+        "thingName" : config.IOT_THING_NAME,
+        "payload" : JSON.stringify(payloadObj)
+    };
+
+    //Update Device Shadow
+    iotData.updateThingShadow(paramsUpdate, function(err, data) {
+      if (err){
+       console.log(err);
+      }
+      else {
+        console.log(data);
+
+      }   
+    });
+}
+
 const handlers = {
     'LaunchRequest': function () {
         this.emit(':ask', HELP_MESSAGE, HELP_REPROMPT);
@@ -81,6 +111,7 @@ const handlers = {
     'AskQuestion': function () {
         //Let's see if I have stored the user's name in Dynamo
         getName(this.event.session.user.userId, this.event.request.intent.slots.Question.value, this, function (message, self) {
+            updateIoT(message);
             var params = {
                 Message: message, /* required */
                 MessageAttributes: {
@@ -98,11 +129,9 @@ const handlers = {
             };
             sns.publish(params, function (err, data) {
                 if (err) {
-                    //console.log(err, err.stack); // an error occurred
                     self.emit(':tellWithCard', `An error occured trying to send ${YOUR_NAME} a question`, SKILL_NAME, message);
                 }
                 else {
-                    //console.log(data);           // successful response
                     self.emit(':tellWithCard', RESPONSE, SKILL_NAME, message);
                 }
             });
